@@ -14,19 +14,15 @@ class QuerySnapshotMatcher implements Matcher {
   }
 
   @override
-  Description describeMismatch(
-      item, Description mismatchDescription, Map matchState, bool verbose) {
+  Description describeMismatch(item, Description mismatchDescription, Map matchState, bool verbose) {
     mismatchDescription.add('Snapshot does not match expected data.');
-
-    // TODO: this will crash if there are fewer matchers than documents.
 
     final snapshot = item as QuerySnapshot;
     for (var i = 0; i < snapshot.docs.length; i++) {
       final matcher = _documentSnapshotMatchers[i];
       final item = snapshot.docs[i];
       if (!matcher.matches(item, matchState)) {
-        matcher.describeMismatch(
-            item, mismatchDescription, matchState, verbose);
+        matcher.describeMismatch(item, mismatchDescription, matchState, verbose);
       }
     }
     return mismatchDescription;

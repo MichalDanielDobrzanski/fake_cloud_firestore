@@ -35,8 +35,7 @@ void main() {
     expect(
         instance
             .collection('messages')
-            .where('timestamp',
-                isGreaterThan: now.subtract(Duration(seconds: 1)))
+            .where('timestamp', isGreaterThan: now.subtract(Duration(seconds: 1)))
             .snapshots(),
         emits(QuerySnapshotMatcher([
           DocumentSnapshotMatcher.onData({
@@ -46,11 +45,7 @@ void main() {
           })
         ])));
     // Filter out everything and check that there is no result.
-    expect(
-        instance
-            .collection('messages')
-            .where('timestamp', isGreaterThan: now.add(Duration(seconds: 1)))
-            .snapshots(),
+    expect(instance.collection('messages').where('timestamp', isGreaterThan: now.add(Duration(seconds: 1))).snapshots(),
         emits(QuerySnapshotMatcher([])));
   });
 
@@ -73,10 +68,7 @@ void main() {
     });
     // Test filtering.
     expect(
-        instance
-            .collection('messages')
-            .where('timestamp', isLessThanOrEqualTo: now)
-            .snapshots(),
+        instance.collection('messages').where('timestamp', isLessThanOrEqualTo: now).snapshots(),
         emits(QuerySnapshotMatcher([
           DocumentSnapshotMatcher.onData({
             'content': 'before',
@@ -90,15 +82,11 @@ void main() {
     expect(
         instance
             .collection('messages')
-            .where('timestamp',
-                isLessThanOrEqualTo: now.subtract(Duration(seconds: 2)))
+            .where('timestamp', isLessThanOrEqualTo: now.subtract(Duration(seconds: 2)))
             .snapshots(),
         emits(QuerySnapshotMatcher([])));
     expect(
-        instance
-            .collection('messages')
-            .where('timestamp', isLessThan: now)
-            .snapshots(),
+        instance.collection('messages').where('timestamp', isLessThan: now).snapshots(),
         emits(QuerySnapshotMatcher([
           DocumentSnapshotMatcher.onData({
             'content': 'before',
@@ -106,16 +94,10 @@ void main() {
           }),
         ])));
     expect(
-        instance
-            .collection('messages')
-            .where('timestamp', isLessThan: now.subtract(Duration(seconds: 2)))
-            .snapshots(),
+        instance.collection('messages').where('timestamp', isLessThan: now.subtract(Duration(seconds: 2))).snapshots(),
         emits(QuerySnapshotMatcher([])));
     expect(
-        instance
-            .collection('messages')
-            .where('timestamp', isGreaterThanOrEqualTo: now)
-            .snapshots(),
+        instance.collection('messages').where('timestamp', isGreaterThanOrEqualTo: now).snapshots(),
         emits(QuerySnapshotMatcher([
           DocumentSnapshotMatcher.onData({
             'content': 'during',
@@ -129,8 +111,7 @@ void main() {
     expect(
         instance
             .collection('messages')
-            .where('timestamp',
-                isGreaterThanOrEqualTo: now.add(Duration(seconds: 2)))
+            .where('timestamp', isGreaterThanOrEqualTo: now.add(Duration(seconds: 2)))
             .snapshots(),
         emits(QuerySnapshotMatcher([])));
   });
@@ -138,8 +119,7 @@ void main() {
   test('isEqualTo, orderBy, limit and getDocuments', () async {
     final instance = FakeFirebaseFirestore();
     final now = DateTime.now();
-    final bookmarks =
-        instance.collection('users').doc(uid).collection('bookmarks');
+    final bookmarks = instance.collection('users').doc(uid).collection('bookmarks');
     await bookmarks.add({
       'hidden': false,
       'timestamp': now,
@@ -175,57 +155,36 @@ void main() {
     await collection.add({'hidden': false, 'id': 'HIDDEN'});
     await collection.add({'hidden': true, 'id': 'VISIBLE'});
 
-    final visibleSnapshot = (await instance
-        .collection('test')
-        .where('hidden', isNotEqualTo: false)
-        .get());
+    final visibleSnapshot = (await instance.collection('test').where('hidden', isNotEqualTo: false).get());
     expect(visibleSnapshot.docs.length, equals(1));
     expect(visibleSnapshot.docs.first.get('id'), equals('VISIBLE'));
 
-    final hiddenSnapshot = (await instance
-        .collection('test')
-        .where('hidden', isNotEqualTo: true)
-        .get());
+    final hiddenSnapshot = (await instance.collection('test').where('hidden', isNotEqualTo: true).get());
     expect(hiddenSnapshot.docs.length, equals(1));
     expect(hiddenSnapshot.docs.first.get('id'), equals('HIDDEN'));
   });
 
   test('isNull where clause', () async {
     final instance = FakeFirebaseFirestore();
-    await instance
-        .collection('contestants')
-        .add({'name': 'Alice', 'country': 'USA', 'experience': '5'});
+    await instance.collection('contestants').add({'name': 'Alice', 'country': 'USA', 'experience': '5'});
 
-    await instance
-        .collection('contestants')
-        .add({'name': 'Tom', 'country': 'USA'});
+    await instance.collection('contestants').add({'name': 'Tom', 'country': 'USA'});
 
-    final nonNullFieldSnapshot = (await instance
-        .collection('contestants')
-        .where('country', isNull: false)
-        .get());
+    final nonNullFieldSnapshot = (await instance.collection('contestants').where('country', isNull: false).get());
     expect(nonNullFieldSnapshot.docs.length, equals(2));
 
-    final isNotNullFieldSnapshot = (await instance
-        .collection('contestants')
-        .where('experience', isNull: false)
-        .get());
+    final isNotNullFieldSnapshot = (await instance.collection('contestants').where('experience', isNull: false).get());
     expect(isNotNullFieldSnapshot.docs.length, equals(1));
     expect(isNotNullFieldSnapshot.docs.first.get('name'), equals('Alice'));
 
-    final isNullFieldSnapshot = (await instance
-        .collection('contestants')
-        .where('experience', isNull: true)
-        .get());
+    final isNullFieldSnapshot = (await instance.collection('contestants').where('experience', isNull: true).get());
     expect(isNullFieldSnapshot.docs.length, equals(1));
     expect(isNullFieldSnapshot.docs.first.get('name'), equals('Tom'));
   });
 
   test('orderBy returns documents with null fields first', () async {
     final instance = FakeFirebaseFirestore();
-    await instance
-        .collection('usercourses')
-        .add({'completed_at': Timestamp.fromDate(DateTime.now())});
+    await instance.collection('usercourses').add({'completed_at': Timestamp.fromDate(DateTime.now())});
     await instance.collection('usercourses').add({'completed_at': null});
 
     var query = instance.collection('usercourses').orderBy('completed_at');
@@ -269,8 +228,7 @@ void main() {
       }
     });
 
-    final data =
-        await firestore.collection('test').orderBy('nested.value').get();
+    final data = await firestore.collection('test').orderBy('nested.value').get();
     expect(data.docs.first.get('nested.value'), 2);
     expect(data.docs.first.data()['nested']['value'], 2);
   });
@@ -448,10 +406,7 @@ void main() {
     await instance.collection('users').doc('2').set({'value': 2});
     await instance.collection('users').doc('3').set({'value': 3});
 
-    final snapshot = await instance
-        .collection('users')
-        .where(FieldPath.documentId, isEqualTo: '1')
-        .get();
+    final snapshot = await instance.collection('users').where(FieldPath.documentId, isEqualTo: '1').get();
 
     final documents = snapshot.docs;
 
@@ -470,8 +425,7 @@ void main() {
 
   test('Chained where queries return the correct snapshots', () async {
     final instance = FakeFirebaseFirestore();
-    final bookmarks =
-        instance.collection('users').doc(uid).collection('bookmarks');
+    final bookmarks = instance.collection('users').doc(uid).collection('bookmarks');
     await bookmarks.add({
       'hidden': false,
     });
@@ -564,13 +518,9 @@ void main() {
 
     await instance.collection('messages').doc().set({'Username': 'John'});
 
-    final documentSnapshot =
-        await instance.collection('messages').doc(uid).get();
+    final documentSnapshot = await instance.collection('messages').doc(uid).get();
 
-    final snapshots = await instance
-        .collection('messages')
-        .startAfterDocument(documentSnapshot)
-        .get();
+    final snapshots = await instance.collection('messages').startAfterDocument(documentSnapshot).get();
 
     expect(snapshots.docs, hasLength(2));
     expect(
@@ -579,8 +529,7 @@ void main() {
     );
   });
 
-  test('chaining where and startAfterDocument return correct documents',
-      () async {
+  test('chaining where and startAfterDocument return correct documents', () async {
     final instance = FakeFirebaseFirestore();
 
     await instance.collection('messages').doc().set({'username': 'Bob'});
@@ -594,8 +543,7 @@ void main() {
 
     await instance.collection('messages').doc().set({'username': 'Bob'});
 
-    final documentSnapshot =
-        await instance.collection('messages').doc(uid).get();
+    final documentSnapshot = await instance.collection('messages').doc(uid).get();
 
     final querySnapshot = await instance
         .collection('messages')
@@ -611,18 +559,14 @@ void main() {
 
     await instance.collection('messages').doc(uid).set({'username': 'Bob'});
 
-    final documentSnapshot =
-        await instance.collection('messages').doc(uid).get();
+    final documentSnapshot = await instance.collection('messages').doc(uid).get();
 
     await instance.collection('123').doc().set({'tag': 'bike'});
 
     await instance.collection('123').doc().set({'tag': 'chess'});
 
     expect(
-      () async => await instance
-          .collection('123')
-          .startAfterDocument(documentSnapshot)
-          .get(),
+      () async => await instance.collection('123').startAfterDocument(documentSnapshot).get(),
       throwsA(TypeMatcher<PlatformException>()),
     );
   });
@@ -635,10 +579,7 @@ void main() {
     await instance.collection('messages').add({'Username': 'Cris'});
     await instance.collection('messages').add({'Username': 'John'});
 
-    final snapshots = await instance
-        .collection('messages')
-        .orderBy('Username')
-        .startAfter(['Bob']).get();
+    final snapshots = await instance.collection('messages').orderBy('Username').startAfter(['Bob']).get();
 
     expect(snapshots.docs, hasLength(2));
   });
@@ -651,32 +592,21 @@ void main() {
     await instance.collection('messages').add({'Username': 'Cris'});
     await instance.collection('messages').add({'Username': 'John'});
 
-    final snapshots = await instance
-        .collection('messages')
-        .orderBy('Username')
-        .startAfter(['Brice']).get();
+    final snapshots = await instance.collection('messages').orderBy('Username').startAfter(['Brice']).get();
 
     expect(snapshots.docs, hasLength(2));
   });
 
   test('Continuous data receive via stream with where', () async {
     final instance = FakeFirebaseFirestore();
-    instance
-        .collection('messages')
-        .where('archived', isEqualTo: false)
-        .snapshots()
-        .listen(expectAsync1((snapshot) {
+    instance.collection('messages').where('archived', isEqualTo: false).snapshots().listen(expectAsync1((snapshot) {
           expect(snapshot.docs.length, inInclusiveRange(0, 2));
           for (final d in snapshot.docs) {
             expect(d.get('archived'), isFalse);
           }
         }, count: 3)); // initial [], when add 'hello!' and when add 'hola!'.
 
-    instance
-        .collection('messages')
-        .where('archived', isEqualTo: true)
-        .snapshots()
-        .listen(expectAsync1((snapshot) {
+    instance.collection('messages').where('archived', isEqualTo: true).snapshots().listen(expectAsync1((snapshot) {
           expect(snapshot.docs.length, inInclusiveRange(0, 1));
           for (final d in snapshot.docs) {
             expect(d.get('archived'), isTrue);
@@ -702,11 +632,7 @@ void main() {
     });
 
     // check new stream will receive the latest data.
-    instance
-        .collection('messages')
-        .where('archived', isEqualTo: false)
-        .snapshots()
-        .listen(expectAsync1((snapshot) {
+    instance.collection('messages').where('archived', isEqualTo: false).snapshots().listen(expectAsync1((snapshot) {
       expect(snapshot.docs.length, equals(2));
       for (final d in snapshot.docs) {
         expect(d.get('archived'), isFalse);
@@ -714,8 +640,7 @@ void main() {
     }));
   });
 
-  test('Continuous data receive via stream with orderBy (asc and desc)',
-      () async {
+  test('Continuous data receive via stream with orderBy (asc and desc)', () async {
     final now = DateTime.now();
     final testData = <Map<String, dynamic>>[
       {'content': 'hello!', 'receivedAt': now, 'archived': false},
@@ -743,11 +668,7 @@ void main() {
 
     final instance = FakeFirebaseFirestore();
     var ascCalled = 0;
-    instance
-        .collection('messages')
-        .orderBy('receivedAt')
-        .snapshots()
-        .listen(expectAsync1((snapshot) {
+    instance.collection('messages').orderBy('receivedAt').snapshots().listen(expectAsync1((snapshot) {
           final docs = snapshot.docs;
           try {
             if (ascCalled == 0) {
@@ -767,11 +688,7 @@ void main() {
           }
         }, count: testData.length + 1));
     var descCalled = 0;
-    instance
-        .collection('messages')
-        .orderBy('receivedAt', descending: true)
-        .snapshots()
-        .listen(expectAsync1((snapshot) {
+    instance.collection('messages').orderBy('receivedAt', descending: true).snapshots().listen(expectAsync1((snapshot) {
           final docs = snapshot.docs;
           try {
             if (descCalled == 0) {
@@ -962,8 +879,7 @@ void main() {
       'state': 'Massachusetts',
     });
 
-    final baseQuery =
-        instance.collection('cities').orderBy('name').orderBy('state');
+    final baseQuery = instance.collection('cities').orderBy('name').orderBy('state');
 
     var snapshots = await baseQuery.startAt(['Springfield']).get();
 
@@ -1014,7 +930,6 @@ void main() {
     ]);
 
     snapshots = await baseQuery.endAt(['Springfield']).get();
-    // TODO(https://github.com/atn832/fake_cloud_firestore/issues/166):
     // The actual Firestore returns:
     // {name: Los Angeles, state: California},
     // {name: Springfield, state: Massachusetts},
@@ -1033,7 +948,6 @@ void main() {
 
     // Since there is no Springfield, Florida in our docs, it should ignore the second orderBy value
     snapshots = await baseQuery.endAt(['Springfield', 'Florida']).get();
-    // TODO(https://github.com/atn832/fake_cloud_firestore/issues/167):
     // the actual Firestore returns {name: Los Angeles, state: California}.
     expect(snapshots.docs.toData(), [
       {
@@ -1070,13 +984,10 @@ void main() {
 
     final firestore = FakeFirebaseFirestore();
 
-    final moviesCollection = firestore
-        .collection('movies')
-        .withConverter(fromFirestore: from, toFirestore: to);
+    final moviesCollection = firestore.collection('movies').withConverter(fromFirestore: from, toFirestore: to);
     await moviesCollection.add(Movie()..title = 'A long time ago');
     await moviesCollection.add(Movie()..title = 'Robot from the future');
-    final searchResults =
-        await moviesCollection.orderBy('title').startAt(['R']).get();
+    final searchResults = await moviesCollection.orderBy('title').startAt(['R']).get();
     expect(searchResults.size, equals(1));
     final movieFound = searchResults.docs.first.data();
     expect(movieFound.title, equals('Robot from the future'));

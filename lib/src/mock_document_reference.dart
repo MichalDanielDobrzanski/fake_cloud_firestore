@@ -32,21 +32,13 @@ class MockDocumentReference<T extends Object?> implements DocumentReference<T> {
 
   StreamController<DocumentSnapshot<T>> get snapshotStreamController {
     if (!snapshotStreamControllerRoot.containsKey(typedSnapshotsStreamKey)) {
-      snapshotStreamControllerRoot[typedSnapshotsStreamKey] =
-          StreamController<DocumentSnapshot<T>>.broadcast();
+      snapshotStreamControllerRoot[typedSnapshotsStreamKey] = StreamController<DocumentSnapshot<T>>.broadcast();
     }
     return snapshotStreamControllerRoot[typedSnapshotsStreamKey];
   }
 
-  MockDocumentReference(
-      this._firestore,
-      this._path,
-      this._id,
-      this.root,
-      this.docsData,
-      this.rootParent,
-      this.snapshotStreamControllerRoot,
-      this._converter);
+  MockDocumentReference(this._firestore, this._path, this._id, this.root, this.docsData, this.rootParent,
+      this.snapshotStreamControllerRoot, this._converter);
 
   // ignore: unused_field
   final DocumentReferencePlatform _delegate = MockDocumentReferencePlatform();
@@ -86,11 +78,7 @@ class MockDocumentReference<T extends Object?> implements DocumentReference<T> {
   @override
   CollectionReference<Map<String, dynamic>> collection(String collectionPath) {
     final path = [_path, collectionPath].join('/');
-    return MockCollectionReference(
-        _firestore,
-        path,
-        getSubpath(root, collectionPath),
-        docsData,
+    return MockCollectionReference(_firestore, path, getSubpath(root, collectionPath), docsData,
         getSubpath(snapshotStreamControllerRoot, collectionPath));
   }
 
@@ -126,7 +114,6 @@ class MockDocumentReference<T extends Object?> implements DocumentReference<T> {
       });
       return;
     }
-    // TODO: support handling values in lists.
 
     // Handle values.
     if (value is FieldValue) {
@@ -156,8 +143,7 @@ class MockDocumentReference<T extends Object?> implements DocumentReference<T> {
     // For N elements, iterate until N-1 element.
     // For example, key: "foo.bar.baz", this method return the document pointed by
     // 'foo.bar'. The document will be updated by the caller on 'baz' field
-    final keysToIterate =
-        compositeKeyElements.sublist(0, compositeKeyElements.length - 1);
+    final keysToIterate = compositeKeyElements.sublist(0, compositeKeyElements.length - 1);
     for (final keyElement in keysToIterate) {
       if (!document.containsKey(keyElement) || !(document[keyElement] is Map)) {
         document[keyElement] = <String, dynamic>{};
@@ -192,10 +178,10 @@ class MockDocumentReference<T extends Object?> implements DocumentReference<T> {
     // rawDocumentReference manually.
     final rawDocumentReference = _converter == null
         ? this as DocumentReference<Map<String, dynamic>>
-        : MockDocumentReference<Map<String, dynamic>>(_firestore, _path, _id,
-            root, docsData, rootParent, snapshotStreamControllerRoot, null);
-    final rawSnapshot = MockDocumentSnapshot<Map<String, dynamic>>(
-        rawDocumentReference, _id, docsData[_path], null, false, _exists());
+        : MockDocumentReference<Map<String, dynamic>>(
+            _firestore, _path, _id, root, docsData, rootParent, snapshotStreamControllerRoot, null);
+    final rawSnapshot =
+        MockDocumentSnapshot<Map<String, dynamic>>(rawDocumentReference, _id, docsData[_path], null, false, _exists());
     if (_converter == null) {
       // Since there is no converter, we know that T is Map<String, dynamic>, so
       // it is safe to cast.
@@ -203,8 +189,7 @@ class MockDocumentReference<T extends Object?> implements DocumentReference<T> {
     }
     // Convert the document.
     final convertedData = _converter!.fromFirestore(rawSnapshot, null);
-    final convertedSnapshot = MockDocumentSnapshot<T>(
-        this, _id, docsData[_path], convertedData, true, _exists());
+    final convertedSnapshot = MockDocumentSnapshot<T>(this, _id, docsData[_path], convertedData, true, _exists());
     return Future.value(convertedSnapshot);
   }
 
@@ -235,23 +220,14 @@ class MockDocumentReference<T extends Object?> implements DocumentReference<T> {
   }
 
   @override
-  bool operator ==(dynamic o) =>
-      o is DocumentReference && o.firestore == _firestore && o.path == _path;
+  bool operator ==(dynamic o) => o is DocumentReference && o.firestore == _firestore && o.path == _path;
 
   @override
   int get hashCode => _path.hashCode + _firestore.hashCode;
 
   @override
-  DocumentReference<R> withConverter<R>(
-      {required fromFirestore, required toFirestore}) {
-    return MockDocumentReference<R>(
-        _firestore,
-        _path,
-        _id,
-        root,
-        docsData,
-        rootParent,
-        snapshotStreamControllerRoot,
+  DocumentReference<R> withConverter<R>({required fromFirestore, required toFirestore}) {
+    return MockDocumentReference<R>(_firestore, _path, _id, root, docsData, rootParent, snapshotStreamControllerRoot,
         Converter(fromFirestore, toFirestore));
   }
 }

@@ -12,8 +12,7 @@ import 'fake_query_with_parent.dart';
 import 'mock_query_platform.dart';
 import 'mock_query_snapshot.dart';
 
-typedef _QueryOperation<T extends Object?> = List<DocumentSnapshot<T>> Function(
-    List<DocumentSnapshot<T>> input);
+typedef _QueryOperation<T extends Object?> = List<DocumentSnapshot<T>> Function(List<DocumentSnapshot<T>> input);
 
 // ignore: subtype_of_sealed_class
 class MockQuery<T extends Object?> extends FakeQueryWithParent<T> {
@@ -26,8 +25,7 @@ class MockQuery<T extends Object?> extends FakeQueryWithParent<T> {
   /// "orderBy". Null if this is a collection reference.
   final _QueryOperation<T>? _operation;
 
-  MockQuery(this._parentQuery, this._operation)
-      : parameters = _parentQuery?.parameters ?? {};
+  MockQuery(this._parentQuery, this._operation) : parameters = _parentQuery?.parameters ?? {};
 
   @override
   final Map<String, dynamic> parameters;
@@ -56,9 +54,7 @@ class MockQuery<T extends Object?> extends FakeQueryWithParent<T> {
       });
 
       if (index == -1) {
-        throw PlatformException(
-            code: 'Invalid Query',
-            message: 'The document specified wasn\'t found');
+        throw PlatformException(code: 'Invalid Query', message: 'The document specified wasn\'t found');
       }
 
       return docs.sublist(index + 1);
@@ -138,9 +134,7 @@ class MockQuery<T extends Object?> extends FakeQueryWithParent<T> {
   Query<T> _cursorUtil({
     required List<dynamic> values,
     required List<dynamic> orderByKeys,
-    required List<DocumentSnapshot<T>> Function(
-            List<DocumentSnapshot<T>> docs, int index, bool exactMatch)
-        f,
+    required List<DocumentSnapshot<T>> Function(List<DocumentSnapshot<T>> docs, int index, bool exactMatch) f,
   }) {
     return MockQuery<T>(this, (docs) {
       assert(
@@ -201,26 +195,25 @@ class MockQuery<T extends Object?> extends FakeQueryWithParent<T> {
       List<dynamic>? whereIn,
       List<dynamic>? whereNotIn,
       bool? isNull}) {
-    final operation =
-        (List<DocumentSnapshot<T>> docs) => docs.where((document) {
-              dynamic value;
-              if (field is String) {
-                value = document.get(field);
-              } else if (field == FieldPath.documentId) {
-                value = document.id;
-              }
-              return _valueMatchesQuery(value,
-                  isEqualTo: isEqualTo,
-                  isNotEqualTo: isNotEqualTo,
-                  isLessThan: isLessThan,
-                  isLessThanOrEqualTo: isLessThanOrEqualTo,
-                  isGreaterThan: isGreaterThan,
-                  isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
-                  arrayContains: arrayContains,
-                  arrayContainsAny: arrayContainsAny,
-                  whereIn: whereIn,
-                  isNull: isNull);
-            }).toList();
+    final operation = (List<DocumentSnapshot<T>> docs) => docs.where((document) {
+          dynamic value;
+          if (field is String) {
+            value = document.get(field);
+          } else if (field == FieldPath.documentId) {
+            value = document.id;
+          }
+          return _valueMatchesQuery(value,
+              isEqualTo: isEqualTo,
+              isNotEqualTo: isNotEqualTo,
+              isLessThan: isLessThan,
+              isLessThanOrEqualTo: isLessThanOrEqualTo,
+              isGreaterThan: isGreaterThan,
+              isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+              arrayContains: arrayContains,
+              arrayContainsAny: arrayContainsAny,
+              whereIn: whereIn,
+              isNull: isNull);
+        }).toList();
     return MockQuery<T>(this, operation);
   }
 
@@ -315,19 +308,16 @@ class MockQuery<T extends Object?> extends FakeQueryWithParent<T> {
 
   @override
   Query<T> endAtDocument(DocumentSnapshot documentSnapshot) {
-    // TODO: implement endAtDocument
     throw UnimplementedError();
   }
 
   @override
   Query<T> endBefore(List values) {
-    // TODO: implement endBefore
     throw UnimplementedError();
   }
 
   @override
   Query<T> endBeforeDocument(DocumentSnapshot documentSnapshot) {
-    // TODO: implement endBeforeDocument
     throw UnimplementedError();
   }
 
@@ -343,7 +333,6 @@ class MockQuery<T extends Object?> extends FakeQueryWithParent<T> {
 
   @override
   Query<T> startAtDocument(DocumentSnapshot documentSnapshot) {
-    // TODO: implement startAtDocument
     throw UnimplementedError();
   }
 

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:firestore_example/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../lib/main.dart';
 
 const MessagesCollection = 'messages';
 
@@ -16,8 +17,7 @@ void main() {
     });
 
     // Render the widget.
-    await tester.pumpWidget(MaterialApp(
-        title: 'Firestore Example', home: MyHomePage(firestore: firestore)));
+    await tester.pumpWidget(MaterialApp(title: 'Firestore Example', home: MyHomePage(firestore: firestore)));
     // Let the snapshots stream fire a snapshot.
     await tester.idle();
     // Re-render.
@@ -32,8 +32,7 @@ void main() {
     final firestore = FakeFirebaseFirestore();
 
     // Render the widget.
-    await tester.pumpWidget(MaterialApp(
-        title: 'Firestore Example', home: MyHomePage(firestore: firestore)));
+    await tester.pumpWidget(MaterialApp(title: 'Firestore Example', home: MyHomePage(firestore: firestore)));
     // Verify that there is no data.
     expect(find.text('Hello world!'), findsNothing);
 

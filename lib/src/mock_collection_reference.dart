@@ -15,8 +15,7 @@ import 'query_snapshot_stream_manager.dart';
 import 'util.dart';
 
 // ignore: subtype_of_sealed_class
-class MockCollectionReference<T extends Object?> extends MockQuery<T>
-    implements CollectionReference<T> {
+class MockCollectionReference<T extends Object?> extends MockQuery<T> implements CollectionReference<T> {
   final Map<String, dynamic> root;
   final Map<String, dynamic> docsData;
   final Map<String, dynamic> snapshotStreamControllerRoot;
@@ -28,8 +27,7 @@ class MockCollectionReference<T extends Object?> extends MockQuery<T>
   final String _path;
 
   // ignore: unused_field
-  final CollectionReferencePlatform _delegate =
-      MockCollectionReferencePlatform();
+  final CollectionReferencePlatform _delegate = MockCollectionReferencePlatform();
 
   MockCollectionReference(
     this._firestore,
@@ -81,8 +79,7 @@ class MockCollectionReference<T extends Object?> extends MockQuery<T>
       }).toList();
     }
     return MockQuerySnapshot<T>((await Future.wait(futureDocs))
-        .where(
-            (snapshot) => _firestore.hasSavedDocument(snapshot.reference.path))
+        .where((snapshot) => _firestore.hasSavedDocument(snapshot.reference.path))
         .toList());
   }
 
@@ -94,8 +91,7 @@ class MockCollectionReference<T extends Object?> extends MockQuery<T>
     if (pathSegments.last == _collectionId) {
       final documentReferences = documentOrCollectionEntries
           .map((entry) => _documentReference(path, entry.key, node))
-          .where((documentReference) =>
-              docsData.keys.contains(documentReference.path));
+          .where((documentReference) => docsData.keys.contains(documentReference.path));
       for (final documentReference in documentReferences) {
         result.add(documentReference.get());
       }
@@ -116,13 +112,10 @@ class MockCollectionReference<T extends Object?> extends MockQuery<T>
   }
 
   static final Random _random = Random();
-  static final String _autoIdCharacters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  static final String _autoIdCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   static String _generateAutoId() {
     final maxIndex = _autoIdCharacters.length - 1;
-    final autoId = List<int>.generate(20, (_) => _random.nextInt(maxIndex))
-        .map((i) => _autoIdCharacters[i])
-        .join();
+    final autoId = List<int>.generate(20, (_) => _random.nextInt(maxIndex)).map((i) => _autoIdCharacters[i]).join();
     return autoId;
   }
 
@@ -132,8 +125,7 @@ class MockCollectionReference<T extends Object?> extends MockQuery<T>
     return _documentReference(_path, id, root);
   }
 
-  DocumentReference<T> _documentReference(
-      String collectionFullPath, String id, Map<String, dynamic> root) {
+  DocumentReference<T> _documentReference(String collectionFullPath, String id, Map<String, dynamic> root) {
     final fullPath = [collectionFullPath, id].join('/');
     final rawDocumentReference = MockDocumentReference<Map<String, dynamic>>(
       _firestore,
@@ -151,8 +143,7 @@ class MockCollectionReference<T extends Object?> extends MockQuery<T>
     }
     // Convert.
     final convertedDocumentReference = rawDocumentReference.withConverter(
-        fromFirestore: _converter!.fromFirestore,
-        toFirestore: _converter!.toFirestore);
+        fromFirestore: _converter!.fromFirestore, toFirestore: _converter!.toFirestore);
     return convertedDocumentReference;
   }
 
@@ -180,7 +171,6 @@ class MockCollectionReference<T extends Object?> extends MockQuery<T>
   bool operator ==(dynamic other) => identical(this, other);
 
   @override
-  // TODO: implement id
   String get id => throw UnimplementedError();
 
   @override
@@ -188,10 +178,8 @@ class MockCollectionReference<T extends Object?> extends MockQuery<T>
     required FromFirestore<R> fromFirestore,
     required ToFirestore<R> toFirestore,
   }) =>
-      MockCollectionReference<R>(
-          _firestore, _path, root, docsData, snapshotStreamControllerRoot,
-          isCollectionGroup: _isCollectionGroup,
-          converter: Converter(fromFirestore, toFirestore));
+      MockCollectionReference<R>(_firestore, _path, root, docsData, snapshotStreamControllerRoot,
+          isCollectionGroup: _isCollectionGroup, converter: Converter(fromFirestore, toFirestore));
 
   @override
   FakeQueryWithParent? get parentQuery => null;
